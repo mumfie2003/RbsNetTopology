@@ -10,7 +10,7 @@ using Radzen.Blazor;
 
 namespace RbsNetTopology.Pages
 {
-    public partial class Issues
+    public partial class DtReportRecipients
     {
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
@@ -33,32 +33,32 @@ namespace RbsNetTopology.Pages
         [Inject]
         public rbs_net_topologyService rbs_net_topologyService { get; set; }
 
-        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.Issue> issues;
+        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> dtReportRecipients;
 
-        protected RadzenDataGrid<RbsNetTopology.Models.rbs_net_topology.Issue> grid0;
+        protected RadzenDataGrid<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> grid0;
         protected override async Task OnInitializedAsync()
         {
-            issues = await rbs_net_topologyService.GetIssues(new Query { Expand = "DtReportRecipient,DtStatusType" });
+            dtReportRecipients = await rbs_net_topologyService.GetDtReportRecipients();
         }
 
         protected async Task AddButtonClick(MouseEventArgs args)
         {
-            await DialogService.OpenAsync<AddIssue>("Add Issue", null);
+            await DialogService.OpenAsync<AddDtReportRecipient>("Add DtReportRecipient", null);
             await grid0.Reload();
         }
 
-        protected async Task EditRow(RbsNetTopology.Models.rbs_net_topology.Issue args)
+        protected async Task EditRow(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient args)
         {
-            await DialogService.OpenAsync<EditIssue>("Edit Issue", new Dictionary<string, object> { {"Id", args.Id} });
+            await DialogService.OpenAsync<EditDtReportRecipient>("Edit DtReportRecipient", new Dictionary<string, object> { {"Code", args.Code} });
         }
 
-        protected async Task GridDeleteButtonClick(MouseEventArgs args, RbsNetTopology.Models.rbs_net_topology.Issue issue)
+        protected async Task GridDeleteButtonClick(MouseEventArgs args, RbsNetTopology.Models.rbs_net_topology.DtReportRecipient dtReportRecipient)
         {
             try
             {
                 if (await DialogService.Confirm("Are you sure you want to delete this record?") == true)
                 {
-                    var deleteResult = await rbs_net_topologyService.DeleteIssue(issue.Id);
+                    var deleteResult = await rbs_net_topologyService.DeleteDtReportRecipient(dtReportRecipient.Code);
 
                     if (deleteResult != null)
                     {
@@ -72,7 +72,7 @@ namespace RbsNetTopology.Pages
                 {
                     Severity = NotificationSeverity.Error,
                     Summary = $"Error",
-                    Detail = $"Unable to delete Issue"
+                    Detail = $"Unable to delete DtReportRecipient"
                 });
             }
         }

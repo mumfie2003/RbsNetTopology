@@ -23,10 +23,42 @@ namespace RbsNetTopology.Data
             base.OnModelCreating(builder);
 
             builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .HasOne(i => i.DtReportRecipient)
+              .WithMany(i => i.Issues)
+              .HasForeignKey(i => i.AssignedReportToRecipientCode)
+              .HasPrincipalKey(i => i.Code);
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .HasOne(i => i.DtStatusType)
+              .WithMany(i => i.Issues)
+              .HasForeignKey(i => i.AssignedStatusCode)
+              .HasPrincipalKey(i => i.Code);
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
               .Property(p => p.Subject)
               .HasDefaultValueSql(@"(N'')");
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .Property(p => p.CreateDateTime)
+              .HasDefaultValueSql(@"('0001-01-01T00:00:00.0000000')");
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .Property(p => p.CreateDateTime)
+              .HasColumnType("datetime2");
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .Property(p => p.CompletedDateTime)
+              .HasColumnType("datetime2");
+
+            builder.Entity<RbsNetTopology.Models.rbs_net_topology.Issue>()
+              .Property(p => p.ReportToCreateDateTime)
+              .HasColumnType("datetime2");
             this.OnModelBuilding(builder);
         }
+
+        public DbSet<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> DtReportRecipients { get; set; }
+
+        public DbSet<RbsNetTopology.Models.rbs_net_topology.DtStatusType> DtStatusTypes { get; set; }
 
         public DbSet<RbsNetTopology.Models.rbs_net_topology.Issue> Issues { get; set; }
 

@@ -14,16 +14,40 @@
     </RadzenRow>
     <RadzenRow>
       <RadzenColumn SizeMD=12>
-        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"  AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
             Data="@issues" TItem="RbsNetTopology.Models.rbs_net_topology.Issue" RowSelect="@EditRow">
             <Columns>
                 <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="Id" Title="Id">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="Subject" Title="Subject">
                 </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="ReportToCaseRef" Title="Report To Case Ref">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="What3Words" Title="What3 Words">
+                </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="Latitude" Title="Latitude">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="Longitude" Title="Longitude">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="LocationType" Title="Location Type">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="AdditionalInfo" Title="Additional Info">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="ActionTaken" Title="Action Taken">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="CreateDateTime" Title="Create Date Time">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="CompletedDateTime" Title="Completed Date Time">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="Category" Title="Category">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="IsActive" Title="Is Active">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="ReportToCreateDateTime" Title="Report To Create Date Time">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="DtReportRecipient.Code" Title="Dt Report Recipient">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Property="DtStatusType.Code" Title="Dt Status Type">
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn TItem="RbsNetTopology.Models.rbs_net_topology.Issue" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                     <Template Context="issue">

@@ -39,9 +39,17 @@ namespace RbsNetTopology.Pages
         protected override async Task OnInitializedAsync()
         {
             issue = await rbs_net_topologyService.GetIssueById(Id);
+
+            dtReportRecipientsForAssignedReportToRecipientCode = await rbs_net_topologyService.GetDtReportRecipients();
+
+            dtStatusTypesForAssignedStatusCode = await rbs_net_topologyService.GetDtStatusTypes();
         }
         protected bool errorVisible;
         protected RbsNetTopology.Models.rbs_net_topology.Issue issue;
+
+        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> dtReportRecipientsForAssignedReportToRecipientCode;
+
+        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.DtStatusType> dtStatusTypesForAssignedStatusCode;
 
         protected async Task FormSubmit()
         {
@@ -50,7 +58,7 @@ namespace RbsNetTopology.Pages
 #if !RADZEN
                 MappingUtils mappingUtils = new MappingUtils();
                 issue.Location = mappingUtils.CalculateLocation(issue.Latitude, issue.Longitude);
-#endif  
+#endif
                 await rbs_net_topologyService.UpdateIssue(Id, issue);
                 DialogService.Close(issue);
             }

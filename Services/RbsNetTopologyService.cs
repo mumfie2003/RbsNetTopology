@@ -69,6 +69,330 @@ namespace RbsNetTopology
         }
 
 
+        public async Task ExportDtReportRecipientsToExcel(Query query = null, string fileName = null)
+        {
+            navigationManager.NavigateTo(query != null ? query.ToUrl($"export/rbs_net_topology/dtreportrecipients/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/rbs_net_topology/dtreportrecipients/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
+        }
+
+        public async Task ExportDtReportRecipientsToCSV(Query query = null, string fileName = null)
+        {
+            navigationManager.NavigateTo(query != null ? query.ToUrl($"export/rbs_net_topology/dtreportrecipients/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/rbs_net_topology/dtreportrecipients/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
+        }
+
+        partial void OnDtReportRecipientsRead(ref IQueryable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> items);
+
+        public async Task<IQueryable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient>> GetDtReportRecipients(Query query = null)
+        {
+            var items = Context.DtReportRecipients.AsQueryable();
+
+
+            if (query != null)
+            {
+                if (!string.IsNullOrEmpty(query.Expand))
+                {
+                    var propertiesToExpand = query.Expand.Split(',');
+                    foreach(var p in propertiesToExpand)
+                    {
+                        items = items.Include(p.Trim());
+                    }
+                }
+
+                ApplyQuery(ref items, query);
+            }
+
+            OnDtReportRecipientsRead(ref items);
+
+            return await Task.FromResult(items);
+        }
+
+        partial void OnDtReportRecipientGet(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+        partial void OnGetDtReportRecipientByCode(ref IQueryable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> items);
+
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> GetDtReportRecipientByCode(string code)
+        {
+            var items = Context.DtReportRecipients
+                              .AsNoTracking()
+                              .Where(i => i.Code == code);
+
+ 
+            OnGetDtReportRecipientByCode(ref items);
+
+            var itemToReturn = items.FirstOrDefault();
+
+            OnDtReportRecipientGet(itemToReturn);
+
+            return await Task.FromResult(itemToReturn);
+        }
+
+        partial void OnDtReportRecipientCreated(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+        partial void OnAfterDtReportRecipientCreated(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> CreateDtReportRecipient(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient dtreportrecipient)
+        {
+            OnDtReportRecipientCreated(dtreportrecipient);
+
+            var existingItem = Context.DtReportRecipients
+                              .Where(i => i.Code == dtreportrecipient.Code)
+                              .FirstOrDefault();
+
+            if (existingItem != null)
+            {
+               throw new Exception("Item already available");
+            }            
+
+            try
+            {
+                Context.DtReportRecipients.Add(dtreportrecipient);
+                Context.SaveChanges();
+            }
+            catch
+            {
+                Context.Entry(dtreportrecipient).State = EntityState.Detached;
+                throw;
+            }
+
+            OnAfterDtReportRecipientCreated(dtreportrecipient);
+
+            return dtreportrecipient;
+        }
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> CancelDtReportRecipientChanges(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item)
+        {
+            var entityToCancel = Context.Entry(item);
+            if (entityToCancel.State == EntityState.Modified)
+            {
+              entityToCancel.CurrentValues.SetValues(entityToCancel.OriginalValues);
+              entityToCancel.State = EntityState.Unchanged;
+            }
+
+            return item;
+        }
+
+        partial void OnDtReportRecipientUpdated(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+        partial void OnAfterDtReportRecipientUpdated(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> UpdateDtReportRecipient(string code, RbsNetTopology.Models.rbs_net_topology.DtReportRecipient dtreportrecipient)
+        {
+            OnDtReportRecipientUpdated(dtreportrecipient);
+
+            var itemToUpdate = Context.DtReportRecipients
+                              .Where(i => i.Code == dtreportrecipient.Code)
+                              .FirstOrDefault();
+
+            if (itemToUpdate == null)
+            {
+               throw new Exception("Item no longer available");
+            }
+                
+            var entryToUpdate = Context.Entry(itemToUpdate);
+            entryToUpdate.CurrentValues.SetValues(dtreportrecipient);
+            entryToUpdate.State = EntityState.Modified;
+
+            Context.SaveChanges();
+
+            OnAfterDtReportRecipientUpdated(dtreportrecipient);
+
+            return dtreportrecipient;
+        }
+
+        partial void OnDtReportRecipientDeleted(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+        partial void OnAfterDtReportRecipientDeleted(RbsNetTopology.Models.rbs_net_topology.DtReportRecipient item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> DeleteDtReportRecipient(string code)
+        {
+            var itemToDelete = Context.DtReportRecipients
+                              .Where(i => i.Code == code)
+                              .Include(i => i.Issues)
+                              .FirstOrDefault();
+
+            if (itemToDelete == null)
+            {
+               throw new Exception("Item no longer available");
+            }
+
+            OnDtReportRecipientDeleted(itemToDelete);
+
+
+            Context.DtReportRecipients.Remove(itemToDelete);
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch
+            {
+                Context.Entry(itemToDelete).State = EntityState.Unchanged;
+                throw;
+            }
+
+            OnAfterDtReportRecipientDeleted(itemToDelete);
+
+            return itemToDelete;
+        }
+    
+        public async Task ExportDtStatusTypesToExcel(Query query = null, string fileName = null)
+        {
+            navigationManager.NavigateTo(query != null ? query.ToUrl($"export/rbs_net_topology/dtstatustypes/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/rbs_net_topology/dtstatustypes/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
+        }
+
+        public async Task ExportDtStatusTypesToCSV(Query query = null, string fileName = null)
+        {
+            navigationManager.NavigateTo(query != null ? query.ToUrl($"export/rbs_net_topology/dtstatustypes/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/rbs_net_topology/dtstatustypes/csv(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
+        }
+
+        partial void OnDtStatusTypesRead(ref IQueryable<RbsNetTopology.Models.rbs_net_topology.DtStatusType> items);
+
+        public async Task<IQueryable<RbsNetTopology.Models.rbs_net_topology.DtStatusType>> GetDtStatusTypes(Query query = null)
+        {
+            var items = Context.DtStatusTypes.AsQueryable();
+
+
+            if (query != null)
+            {
+                if (!string.IsNullOrEmpty(query.Expand))
+                {
+                    var propertiesToExpand = query.Expand.Split(',');
+                    foreach(var p in propertiesToExpand)
+                    {
+                        items = items.Include(p.Trim());
+                    }
+                }
+
+                ApplyQuery(ref items, query);
+            }
+
+            OnDtStatusTypesRead(ref items);
+
+            return await Task.FromResult(items);
+        }
+
+        partial void OnDtStatusTypeGet(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+        partial void OnGetDtStatusTypeByCode(ref IQueryable<RbsNetTopology.Models.rbs_net_topology.DtStatusType> items);
+
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtStatusType> GetDtStatusTypeByCode(string code)
+        {
+            var items = Context.DtStatusTypes
+                              .AsNoTracking()
+                              .Where(i => i.Code == code);
+
+ 
+            OnGetDtStatusTypeByCode(ref items);
+
+            var itemToReturn = items.FirstOrDefault();
+
+            OnDtStatusTypeGet(itemToReturn);
+
+            return await Task.FromResult(itemToReturn);
+        }
+
+        partial void OnDtStatusTypeCreated(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+        partial void OnAfterDtStatusTypeCreated(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtStatusType> CreateDtStatusType(RbsNetTopology.Models.rbs_net_topology.DtStatusType dtstatustype)
+        {
+            OnDtStatusTypeCreated(dtstatustype);
+
+            var existingItem = Context.DtStatusTypes
+                              .Where(i => i.Code == dtstatustype.Code)
+                              .FirstOrDefault();
+
+            if (existingItem != null)
+            {
+               throw new Exception("Item already available");
+            }            
+
+            try
+            {
+                Context.DtStatusTypes.Add(dtstatustype);
+                Context.SaveChanges();
+            }
+            catch
+            {
+                Context.Entry(dtstatustype).State = EntityState.Detached;
+                throw;
+            }
+
+            OnAfterDtStatusTypeCreated(dtstatustype);
+
+            return dtstatustype;
+        }
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtStatusType> CancelDtStatusTypeChanges(RbsNetTopology.Models.rbs_net_topology.DtStatusType item)
+        {
+            var entityToCancel = Context.Entry(item);
+            if (entityToCancel.State == EntityState.Modified)
+            {
+              entityToCancel.CurrentValues.SetValues(entityToCancel.OriginalValues);
+              entityToCancel.State = EntityState.Unchanged;
+            }
+
+            return item;
+        }
+
+        partial void OnDtStatusTypeUpdated(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+        partial void OnAfterDtStatusTypeUpdated(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtStatusType> UpdateDtStatusType(string code, RbsNetTopology.Models.rbs_net_topology.DtStatusType dtstatustype)
+        {
+            OnDtStatusTypeUpdated(dtstatustype);
+
+            var itemToUpdate = Context.DtStatusTypes
+                              .Where(i => i.Code == dtstatustype.Code)
+                              .FirstOrDefault();
+
+            if (itemToUpdate == null)
+            {
+               throw new Exception("Item no longer available");
+            }
+                
+            var entryToUpdate = Context.Entry(itemToUpdate);
+            entryToUpdate.CurrentValues.SetValues(dtstatustype);
+            entryToUpdate.State = EntityState.Modified;
+
+            Context.SaveChanges();
+
+            OnAfterDtStatusTypeUpdated(dtstatustype);
+
+            return dtstatustype;
+        }
+
+        partial void OnDtStatusTypeDeleted(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+        partial void OnAfterDtStatusTypeDeleted(RbsNetTopology.Models.rbs_net_topology.DtStatusType item);
+
+        public async Task<RbsNetTopology.Models.rbs_net_topology.DtStatusType> DeleteDtStatusType(string code)
+        {
+            var itemToDelete = Context.DtStatusTypes
+                              .Where(i => i.Code == code)
+                              .Include(i => i.Issues)
+                              .FirstOrDefault();
+
+            if (itemToDelete == null)
+            {
+               throw new Exception("Item no longer available");
+            }
+
+            OnDtStatusTypeDeleted(itemToDelete);
+
+
+            Context.DtStatusTypes.Remove(itemToDelete);
+
+            try
+            {
+                Context.SaveChanges();
+            }
+            catch
+            {
+                Context.Entry(itemToDelete).State = EntityState.Unchanged;
+                throw;
+            }
+
+            OnAfterDtStatusTypeDeleted(itemToDelete);
+
+            return itemToDelete;
+        }
+    
         public async Task ExportIssuesToExcel(Query query = null, string fileName = null)
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl($"export/rbs_net_topology/issues/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')") : $"export/rbs_net_topology/issues/excel(fileName='{(!string.IsNullOrEmpty(fileName) ? UrlEncoder.Default.Encode(fileName) : "Export")}')", true);
@@ -85,6 +409,8 @@ namespace RbsNetTopology
         {
             var items = Context.Issues.AsQueryable();
 
+            items = items.Include(i => i.DtReportRecipient);
+            items = items.Include(i => i.DtStatusType);
 
             if (query != null)
             {
@@ -115,6 +441,8 @@ namespace RbsNetTopology
                               .AsNoTracking()
                               .Where(i => i.Id == id);
 
+            items = items.Include(i => i.DtReportRecipient);
+            items = items.Include(i => i.DtStatusType);
  
             OnGetIssueById(ref items);
 

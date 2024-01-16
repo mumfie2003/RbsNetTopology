@@ -1,0 +1,251 @@
+USE [master]
+GO
+/****** Object:  Database [rbs-net-topology]    Script Date: 16/01/2024 20:03:01 ******/
+CREATE DATABASE [rbs-net-topology]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'rbs-net-topology', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER01\MSSQL\DATA\rbs-net-topology.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'rbs-net-topology_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER01\MSSQL\DATA\rbs-net-topology_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [rbs-net-topology] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [rbs-net-topology].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [rbs-net-topology] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [rbs-net-topology] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [rbs-net-topology] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [rbs-net-topology] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [rbs-net-topology] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET RECOVERY FULL 
+GO
+ALTER DATABASE [rbs-net-topology] SET  MULTI_USER 
+GO
+ALTER DATABASE [rbs-net-topology] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [rbs-net-topology] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [rbs-net-topology] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [rbs-net-topology] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [rbs-net-topology] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [rbs-net-topology] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'rbs-net-topology', N'ON'
+GO
+ALTER DATABASE [rbs-net-topology] SET QUERY_STORE = OFF
+GO
+USE [rbs-net-topology]
+GO
+/****** Object:  Table [dbo].[DtReportRecipients]    Script Date: 16/01/2024 20:03:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DtReportRecipients](
+	[Code] [nvarchar](5) NOT NULL,
+	[Name] [nvarchar](50) NULL,
+ CONSTRAINT [PK_DtReportRecipients] PRIMARY KEY CLUSTERED 
+(
+	[Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DtStatusTypes]    Script Date: 16/01/2024 20:03:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DtStatusTypes](
+	[Code] [nvarchar](2) NOT NULL,
+	[Title] [nvarchar](20) NULL,
+ CONSTRAINT [PK_DtStatusTypes] PRIMARY KEY CLUSTERED 
+(
+	[Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Issues]    Script Date: 16/01/2024 20:03:01 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Issues](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Subject] [nvarchar](100) NOT NULL,
+	[ReportToCaseRef] [nvarchar](100) NULL,
+	[What3Words] [nvarchar](100) NULL,
+	[Latitude] [float] NULL,
+	[Longitude] [float] NULL,
+	[LocationType] [int] NOT NULL,
+	[AdditionalInfo] [nvarchar](max) NULL,
+	[ActionTaken] [nvarchar](max) NULL,
+	[CreateDateTime] [datetime2](7) NOT NULL,
+	[CompletedDateTime] [datetime2](7) NULL,
+	[AssignedStatusCode] [nvarchar](2) NOT NULL,
+	[Category] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[AssignedReportToRecipientCode] [nvarchar](5) NULL,
+	[ReportToCreateDateTime] [datetime2](7) NULL,
+	[Location] [geography] NULL,
+ CONSTRAINT [PK_Issues] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+INSERT [dbo].[DtReportRecipients] ([Code], [Name]) VALUES (N'FMS', N'Fix My Street')
+GO
+INSERT [dbo].[DtReportRecipients] ([Code], [Name]) VALUES (N'HCC', N'Herts County Council')
+GO
+INSERT [dbo].[DtReportRecipients] ([Code], [Name]) VALUES (N'SBC', N'Stevenage Borough Council')
+GO
+INSERT [dbo].[DtStatusTypes] ([Code], [Title]) VALUES (N'CL', N'Closed')
+GO
+INSERT [dbo].[DtStatusTypes] ([Code], [Title]) VALUES (N'FI', N'Fixed')
+GO
+INSERT [dbo].[DtStatusTypes] ([Code], [Title]) VALUES (N'OP', N'Open')
+GO
+SET IDENTITY_INSERT [dbo].[Issues] ON 
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (1044, N'Southwark Close - Dumped Fridge', N'RIC563164257', N'pulse.record.kings', 51.923472, -0.174646, 0, N'reported with evidence of skip being removed and fridge left', NULL, CAST(N'2023-11-23T19:39:18.7675519' AS DateTime2), CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), N'FI', 2, 1, N'SBC', CAST(N'2023-11-19T00:00:00.0000000' AS DateTime2), 0xE6100000010CC7629B5434F649409D4830D5CC5AC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (1045, N'Norwich Close - paving container+black bags', N'RIC563155315', N'treat.chats.wallet', 51.921639, -0.172941, 0, NULL, NULL, CAST(N'2023-11-19T09:14:14.0000000' AS DateTime2), CAST(N'2023-11-28T00:00:00.0000000' AS DateTime2), N'CL', 1, 1, N'SBC', CAST(N'2023-11-19T00:00:00.0000000' AS DateTime2), 0xE6100000010CECDB4944F8F54940C89A9141EE22C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (1046, N'Norwich Close - The Dell', N'RIC554015285', N'sums.care.season', 51.921585, -0.173247, 0, N'Re: Fly-tipping without evidence case RIC554015285 [near Street Record Norwich Close, Stevenage]
+We have the following new information about this case:
+Thank you for your report. This case has been closed because it will be resolved soon by the already planned programme of works.
+
+Cleared by volunteer CW', NULL, CAST(N'2023-10-12T09:21:32.0000000' AS DateTime2), CAST(N'2023-11-28T00:00:00.0000000' AS DateTime2), N'CL', 1, 1, N'SBC', CAST(N'2023-10-12T00:00:00.0000000' AS DateTime2), 0xE6100000010CF9BD4D7FF6F5494083A7902BF52CC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (1047, N'Norwich Close - Asbestos', NULL, N'yard.heats.owners', 51.921666, -0.172941, 0, N'CW reported to Sandra Barr 17th Nov 2023.
+still onsite 24/11/2023 @4pm', NULL, CAST(N'2023-11-12T00:00:00.0000000' AS DateTime2), CAST(N'2023-11-28T00:00:00.0000000' AS DateTime2), N'CL', 1, 1, N'FMS', NULL, 0xE6100000010CE6EAC726F9F54940C89A9141EE22C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (2044, N'Coventry Close-south garage block bins', N'RIC566601128', N'camera.urban.bunk', 51.922016, -0.176132, 0, N'brown bin with rubbed out house number added a few days later', NULL, CAST(N'2023-11-20T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-03T00:00:00.0000000' AS DateTime2), 0xE6100000010CC231CB9E04F64940A2B8E34D7E8BC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3044, N'Southwark Close - loft boards', NULL, N'pulse.record.kings', 51.923472, -0.174646, 0, N'moved to bin', NULL, CAST(N'2023-11-29T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-04T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, NULL, NULL, 0xE6100000010CC7629B5434F649409D4830D5CC5AC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3045, N'Sishes Wood - matress+bed', N'https://www.fixmystreet.com/report/5280040', NULL, 51.91512, -0.180974, 0, NULL, NULL, CAST(N'2023-11-30T10:45:36.0000000' AS DateTime2), CAST(N'2023-12-15T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'FMS', CAST(N'2023-12-04T00:00:00.0000000' AS DateTime2), 0xE6100000010F30F5F3A622F549402191B6F1272AC7BF000000000000F8FF000000000000F8FF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3046, N'Norwich Close - North garage block ', N'RIC566598357', N'origin.insert.guitar', 51.921882, -0.174165, 0, NULL, NULL, CAST(N'2023-11-27T11:03:23.0000000' AS DateTime2), CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-03T00:00:00.0000000' AS DateTime2), 0xE6100000010CB262B83A00F64940B3CD8DE9094BC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3047, N'Wash machine Ely close bin', N'RIC566599794', N'sling.hosts.oppose', 51.923661, -0.173684, 0, NULL, NULL, CAST(N'2023-12-03T15:53:35.2852421' AS DateTime2), CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-03T00:00:00.0000000' AS DateTime2), 0xE6100000010C9BCB0D863AF64940CA52EBFD463BC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3048, N'Southwark Close - black bags+door frame', NULL, N'stream.random.falls', 51.923957, -0.174777, 0, N'Reported to flytipping team', NULL, CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-12T00:00:00.0000000' AS DateTime2), 0xE6100000010C84F4143944F6494029E78BBD175FC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3049, N'Sishes wood brown bin', NULL, N'raves.putty.scare', 51.915818, -0.181145, 0, N'still onsite 16/12/2023', NULL, CAST(N'2023-11-30T00:00:00.0000000' AS DateTime2), NULL, N'OP', 1, 1, NULL, NULL, 0xE6100000010C488B338639F54940E4BD6A65C22FC7BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3050, N'Oval-Jessop Road garage block - furniture', NULL, N'dozed.lately.energetic', 51.918297, -0.181335, 0, N'14/01/2024 22:37:54
+removed by st nics litter pickers friday
+', NULL, CAST(N'2023-12-11T00:00:00.0000000' AS DateTime2), CAST(N'2024-01-12T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, NULL, NULL, 0xE6100000010FE9818FC18AF5494067614F3BFC35C7BF000000000000F8FF000000000000F8FF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3051, N'Coventry close - north garage block - facia board', NULL, N'warns.judge.grows', 51.922394, -0.175826, 0, N'moved to nearest bin 18/12/2023. removed by binman 18/12/2023', NULL, CAST(N'2023-12-17T19:30:58.6877473' AS DateTime2), CAST(N'2023-12-18T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, NULL, NULL, 0xE6100000010C6803B00111F64940E7ABE4637781C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3052, N'Ely Close-Wellfield wood', NULL, N'sling.hosts.oppose', 51.923661, -0.173684, 0, N'Washing machine and furniture removed by SBC flytipping team from this location day before this appeared.
+
+Removed by binman 18/12/2023', NULL, CAST(N'2023-12-13T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-18T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, NULL, NULL, 0xE6100000010C9BCB0D863AF64940CA52EBFD463BC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3053, N'Southwark-Exeter Close - 2 fridges in public alley', N'RIC570379939', N'harsh.clean.panels', 51.924065, -0.175302, 0, N'See also RIC570379939
+Reported by Anonomous', NULL, CAST(N'2023-12-04T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-21T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-18T00:00:00.0000000' AS DateTime2), 0xE6100000010C6A300DC347F64940B63176C24B70C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3054, N'Southwark Close-Sofa and wardrobe', N'RIC570379939', N'random.chase.frosted', 51.923957, -0.175695, 0, N'Fridges reported by anonomous RIC570367674
+
+Sofa no longer onsite 19/12/2023 at 7:53am but wardrobe still there.', NULL, CAST(N'2023-12-15T19:49:07.0000000' AS DateTime2), CAST(N'2023-12-21T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2023-12-18T00:00:00.0000000' AS DateTime2), 0xE6100000010C84F4143944F649405A0D897B2C7DC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3055, N'NHS Id', NULL, N'', 51.9204642313003, -0.179675544945988, 0, N'Handed in to Lister hostital, macmillan unit as no-one on reception.', NULL, CAST(N'2023-12-16T00:00:00.0000000' AS DateTime2), CAST(N'2023-12-18T00:00:00.0000000' AS DateTime2), N'FI', 0, 1, NULL, NULL, 0xE6100000010F4A499DC5D1F54940338DB7B69BFFC6BF000000000000F8FF000000000000F8FF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3056, N'test upload resize', NULL, N'abc.con.g', NULL, NULL, 0, N'14/01/2024 21:38:07
+hewllo
+14/01/2024 21:11:39
+line2
+line3
+14/01/2024 21:08:28
+line1
+', NULL, CAST(N'2023-12-18T08:51:09.7614099' AS DateTime2), NULL, N'OP', 0, 1, NULL, NULL, NULL)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3057, N'Exeter close - builders sand bags', N'RIC575757629', N'daily.crisp.ahead', 51.924334, -0.174296, 0, N'removed by sbc 11/01/2024', NULL, CAST(N'2023-12-09T00:00:00.0000000' AS DateTime2), CAST(N'2024-01-11T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2024-01-09T00:00:00.0000000' AS DateTime2), 0xE6100000010C5A4A969350F64940406CE9D1544FC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3058, N'Reel of Power cable with recipient wellfield wood', N'RIC572684637', N'span.unions.since', 51.926706, -0.172329, 0, N'reel no longer onsite 4/01/2024, not sure if removed by SBC or thief.', NULL, CAST(N'2023-12-29T10:28:56.5228162' AS DateTime2), NULL, N'OP', 2, 1, N'SBC', CAST(N'2023-12-29T00:00:00.0000000' AS DateTime2), 0xE6100000010CE5805D4D9EF649405281936DE00EC6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3059, N'Ceiling boards - Southwark Close', N'RIC575749087', N'accent.zeal.deals', 51.924038, -0.175389, 0, N'might be from demolition of shed next door to tree removal. Next door to where SBC removed tree.', NULL, CAST(N'2023-12-24T00:00:00.0000000' AS DateTime2), NULL, N'OP', 1, 1, N'SBC', CAST(N'2024-01-09T00:00:00.0000000' AS DateTime2), 0xE6100000010C71218FE046F649409F008A912573C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3078, N'Southwark-Essex close public bin', N'RIC575755285', N'gear.exist.belt', 51.923984, -0.174821, 0, N'16/01/2024 09:55:12
+Black bags cleared by SBC sometime yesterday
+14/01/2024 21:42:28
+cleared up loose rubbish into orange bag. label with SBC RIC575755285.
+Lots of smelly food waste, some decorating tools and set of keys. (possibly rear gate, shed or patio door)
+09/01/2024
+Re: Fly-tipping without evidence case RIC575755285 [near 27 Southwark Close, Stevenage]
+We have the following new information about this case:
+Thank you for your report. This case has been closed because it will be resolved soon by the already planned programme of works.', NULL, CAST(N'2024-01-09T09:33:21.0182362' AS DateTime2), CAST(N'2024-01-15T00:00:00.0000000' AS DateTime2), N'FI', 1, 1, N'SBC', CAST(N'2024-01-09T00:00:00.0000000' AS DateTime2), 0xE6100000010F7D03931B45F64940CCB6D3D68860C6BF000000000000F8FF000000000000F8FF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3079, N'Coventry close two bedspreads', NULL, N'admiral.quest.mime', 51.922502, -0.175477, 0, NULL, NULL, CAST(N'2024-01-14T21:44:09.6951818' AS DateTime2), NULL, N'OP', 1, 1, NULL, NULL, 0xE6100000010C4F3FA88B14F64940E49F19C40776C6BF)
+GO
+INSERT [dbo].[Issues] ([Id], [Subject], [ReportToCaseRef], [What3Words], [Latitude], [Longitude], [LocationType], [AdditionalInfo], [ActionTaken], [CreateDateTime], [CompletedDateTime], [AssignedStatusCode], [Category], [IsActive], [AssignedReportToRecipientCode], [ReportToCreateDateTime], [Location]) VALUES (3080, N'Sishs Wood - builders bags ', NULL, N'refuse.cargo.number', 51.914551, -0.181669, 0, NULL, NULL, CAST(N'2024-01-14T21:49:50.9941385' AS DateTime2), NULL, N'OP', 1, 1, NULL, NULL, 0xE6100000010C16C3D50110F549401538D906EE40C7BF)
+GO
+SET IDENTITY_INSERT [dbo].[Issues] OFF
+GO
+ALTER TABLE [dbo].[Issues] ADD  DEFAULT (N'') FOR [Subject]
+GO
+ALTER TABLE [dbo].[Issues] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [CreateDateTime]
+GO
+ALTER TABLE [dbo].[Issues]  WITH CHECK ADD  CONSTRAINT [FK_Issues_DtReportRecipients_AssignedReportToRecipientCode] FOREIGN KEY([AssignedReportToRecipientCode])
+REFERENCES [dbo].[DtReportRecipients] ([Code])
+GO
+ALTER TABLE [dbo].[Issues] CHECK CONSTRAINT [FK_Issues_DtReportRecipients_AssignedReportToRecipientCode]
+GO
+ALTER TABLE [dbo].[Issues]  WITH CHECK ADD  CONSTRAINT [FK_Issues_DtStatusTypes_AssignedStatusCode] FOREIGN KEY([AssignedStatusCode])
+REFERENCES [dbo].[DtStatusTypes] ([Code])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Issues] CHECK CONSTRAINT [FK_Issues_DtStatusTypes_AssignedStatusCode]
+GO
+USE [master]
+GO
+ALTER DATABASE [rbs-net-topology] SET  READ_WRITE 
+GO

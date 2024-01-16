@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
-using RbsNetTopology.Utils;
 
 namespace RbsNetTopology.Pages
 {
-    public partial class AddIssue
+    public partial class AddDtReportRecipient
     {
         [Inject]
         protected IJSRuntime JSRuntime { get; set; }
@@ -35,30 +34,17 @@ namespace RbsNetTopology.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            issue = new RbsNetTopology.Models.rbs_net_topology.Issue();
-
-            dtReportRecipientsForAssignedReportToRecipientCode = await rbs_net_topologyService.GetDtReportRecipients();
-
-            dtStatusTypesForAssignedStatusCode = await rbs_net_topologyService.GetDtStatusTypes();
+            dtReportRecipient = new RbsNetTopology.Models.rbs_net_topology.DtReportRecipient();
         }
         protected bool errorVisible;
-        protected RbsNetTopology.Models.rbs_net_topology.Issue issue;
-
-        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.DtReportRecipient> dtReportRecipientsForAssignedReportToRecipientCode;
-
-        protected IEnumerable<RbsNetTopology.Models.rbs_net_topology.DtStatusType> dtStatusTypesForAssignedStatusCode;
+        protected RbsNetTopology.Models.rbs_net_topology.DtReportRecipient dtReportRecipient;
 
         protected async Task FormSubmit()
         {
             try
             {
-#if !RADZEN
-                MappingUtils mappingUtils = new MappingUtils();
-                issue.Location = mappingUtils.CalculateLocation(issue.Latitude, issue.Longitude);
-#endif
-
-                await rbs_net_topologyService.CreateIssue(issue);
-                DialogService.Close(issue);
+                await rbs_net_topologyService.CreateDtReportRecipient(dtReportRecipient);
+                DialogService.Close(dtReportRecipient);
             }
             catch (Exception ex)
             {
