@@ -18,10 +18,16 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<RbsNetTopology.rbs_net_topologyService>();
+
 builder.Services.AddDbContext<RbsNetTopology.Data.rbs_net_topologyContext>(options =>
 {
+#if !RADZEN
+    options.UseSqlServer(builder.Configuration.GetConnectionString("rbs_net_topologyConnection"), opt => opt.UseNetTopologySuite());
+#else
     options.UseSqlServer(builder.Configuration.GetConnectionString("rbs_net_topologyConnection"));
+#endif
 });
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

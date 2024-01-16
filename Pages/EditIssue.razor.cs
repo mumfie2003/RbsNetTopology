@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Radzen;
 using Radzen.Blazor;
+using RbsNetTopology.Utils;
 
 namespace RbsNetTopology.Pages
 {
@@ -46,6 +47,10 @@ namespace RbsNetTopology.Pages
         {
             try
             {
+#if !RADZEN
+                MappingUtils mappingUtils = new MappingUtils();
+                issue.Location = mappingUtils.CalculateLocation(issue.Latitude, issue.Longitude);
+#endif  
                 await rbs_net_topologyService.UpdateIssue(Id, issue);
                 DialogService.Close(issue);
             }
